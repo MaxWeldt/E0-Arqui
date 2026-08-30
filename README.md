@@ -36,3 +36,7 @@ Se cumplen todos los puntos excepto los siguientes:
 
 1. Nombre del dominio con DNS.
 2. HTTPS con Let's Encrypt
+
+## Uso de IA
+
+Usé Gemini de guía para completar la entrega, 
