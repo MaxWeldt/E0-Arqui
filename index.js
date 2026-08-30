@@ -6,8 +6,7 @@ const { Pool } = require('pg');
 const app = new Koa();
 const router = new Router();
 
-// Configuración de la conexión a Postgres
-// Usando los datos que confirmamos que funcionan (puerto 5433)
+
 const pool = new Pool({
   user: 'maxweldt',
   host: 'db',
@@ -16,19 +15,13 @@ const pool = new Pool({
   port: 5432,
 });
 
-// Middleware para parsear el body JSON de las peticiones
 app.use(bodyParser());
 
-// ---------------------------------------------------------
-// Endpoint Interno: Recibe datos del Connector
-// ---------------------------------------------------------
 router.post('/api/events', async (ctx) => {
     const eventoRecibido = ctx.request.body;
     
     const { idpk, type, packageBody, receivedAt } = eventoRecibido;
 
-    // Se agrega ON CONFLICT DO NOTHING para evitar que la aplicación
-    // se caiga si el broker re-envía un evento que ya fue procesado
     const query = `
         INSERT INTO energy_events (idpk, type, received_at, package_body)
         VALUES ($1, $2, $3, $4)
@@ -50,30 +43,22 @@ router.post('/api/events', async (ctx) => {
     }
 });
 
-// ---------------------------------------------------------
-// Endpoints Públicos: Consulta de datos (Requisitos Funcionales)
-// ---------------------------------------------------------
 
-// RF1, RF3 y RF4: Historial con paginación y filtro por fecha
+
 router.get('/history', async (ctx) => {
-    // RF3: Paginación por default, mostrando 25 registros
     const page = parseInt(ctx.query.page) || 1;
     const limit = parseInt(ctx.query.limit) || 25;
     const offset = (page - 1) * limit;
     
-    // RF4: Filtro opcional por fecha
     const receivedAt = ctx.query.receivedAt; 
 
     let query = 'SELECT * FROM energy_events';
     let values = [];
 
-    // Si el usuario envió el filtro por fecha
     if (receivedAt) {
         query += ' WHERE DATE(received_at) = $1';
         values.push(receivedAt);
     }
-
-    // Ordenar de más reciente a más antiguo y aplicar límites de paginación
     query += ` ORDER BY received_at DESC LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
     values.push(limit, offset);
 
@@ -91,7 +76,6 @@ router.get('/history', async (ctx) => {
     }
 });
 
-// RF2: Endpoint para mostrar el detalle de un registro específico
 router.get('/history/:id', async (ctx) => {
     const { id } = ctx.params;
     try {
@@ -111,9 +95,7 @@ router.get('/history/:id', async (ctx) => {
     }
 });
 
-// ---------------------------------------------------------
-// Iniciar el servidor
-// ---------------------------------------------------------
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 

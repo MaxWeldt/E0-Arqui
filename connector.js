@@ -1,6 +1,5 @@
 const amqp = require('amqplib');
 
-// Configuración de credenciales y rutas
 const BROKER_URL = 'amqps://observer.56:1WpXXj6r1DvCYmFBAzCsqAFv@broker.iic2173.org:5671/energy';
 const QUEUE = 'observer.56.q';
 const MASTER_API_URL = 'http://master:3000/api/events';
@@ -13,7 +12,6 @@ async function iniciarConnector() {
 
         console.log(`Conexión exitosa. Escuchando en la cola: ${QUEUE}`);
 
-        // RNF1: Resistir caídas de servicio del broker intentando reconectarse
         connection.on('error', (err) => {
             console.error("Error de conexión:", err.message);
             setTimeout(iniciarConnector, 5000); 
@@ -24,17 +22,13 @@ async function iniciarConnector() {
             setTimeout(iniciarConnector, 5000);
         });
 
-        // Consumir la cola
         channel.consume(QUEUE, async (msg) => {
             if (msg !== null) {
                 try {
-                    // 1. Parsear el string a un objeto JSON
                     const evento = JSON.parse(msg.content.toString());
                     
-                    // 2. Agregar el timestamp exigido por el enunciado
                     evento.receivedAt = new Date().toISOString();
 
-                    // 3. Alimentar al servicio principal mediante una llamada HTTP POST
                     const response = await fetch(MASTER_API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -42,7 +36,6 @@ async function iniciarConnector() {
                     });
 
                     if (response.ok) {
-                        // 4. Confirmar al broker que el mensaje fue procesado correctamente
                         channel.ack(msg);
                         console.log(`Evento ${evento.idpk} guardado con éxito.`);
                     } else {
@@ -50,7 +43,6 @@ async function iniciarConnector() {
                     }
                 } catch (error) {
                     console.error("Error procesando o enviando el mensaje:", error.message);
-                    // Si falla el parseo o el servidor Master está caído, devolvemos el mensaje a la cola
                     channel.nack(msg); 
                 }
             }
