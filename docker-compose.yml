@@ -3,6 +3,8 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     container_name: energy_db
     environment:
       POSTGRES_USER: maxweldt

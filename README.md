@@ -4,6 +4,8 @@
 * **Endpoints de la API:** La API REST (Master) está en la instancia EC2 de AWS en el puerto 3000. 
 * **Base de datos:** PostgreSQL corriendo en el puerto 5432 interno de Docker.
 * **Orquestación:** Se utilizó Docker Compose para levantar y conectar los tres servicios (`db`, `master`, `connector`), asegurando que todos inicien correctamente gracias a la configuración de `healthchecks`. (index.js es el master)
+
+
 * **Enlaces de prueba:**
   * Historial paginado (RF1, RF3, RF4): http://18.222.132.77:3000/history
   * Detalle de evento (RF2): http://18.222.132.77:3000/history/[INSERTA_UN_ID_AQUI] 
@@ -39,4 +41,4 @@ Se cumplen todos los puntos excepto los siguientes:
 
 ## Uso de IA
 
-Usé Gemini de guía para completar la entrega, 
+Usé Gemini para que fuera de guía para completar la entrega, https://share.gemini.google/gafU04sQcS8z 
