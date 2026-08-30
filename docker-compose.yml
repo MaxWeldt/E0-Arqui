@@ -39,7 +39,6 @@ services:
       master:
         condition: service_healthy
     healthcheck:
-      # Como connector no expone un puerto HTTP, usamos file checking o revisamos el proceso node
       test: ["CMD-SHELL", "ps aux | grep '[n]ode connector.js' || exit 1"]
       interval: 15s
       timeout: 5s
