@@ -7,6 +7,7 @@
 * **Enlaces de prueba:**
   * Historial paginado (RF1, RF3, RF4): http://18.222.132.77:3000/history
   * Detalle de evento (RF2): http://18.222.132.77:3000/history/[INSERTA_UN_ID_AQUI] 
+  * Sin puerto con nginx http://18.222.132.77/history 
 
 ## Nombre del dominio
 Es simplemente la ipv4 de la instancia
@@ -14,7 +15,7 @@ Es simplemente la ipv4 de la instancia
 ## Método de acceso al servidor
 
 
-Para acceder por SSH a la máquina EC2, debe ubicar el archivo `.pem` entregado en Canvas y ejecutar los siguientes comandos en su terminal:
+Para acceder por SSH a la máquina EC2, debe ubicar el archivo `.pem` entregado en Canvas y ejecutar los siguientes comandos en la terminal uno por uno:
 
 1. Asignar los permisos correctos a la llave:
    ```bash
@@ -25,7 +26,7 @@ Para acceder por SSH a la máquina EC2, debe ubicar el archivo `.pem` entregado 
    cd E0_Arqui
 
    (aca pueden corregir lo que sea como por ejemplo:)
-   
+
    sudo docker compose ps
 
 
@@ -35,4 +36,3 @@ Se cumplen todos los puntos excepto los siguientes:
 
 1. Nombre del dominio con DNS.
 2. HTTPS con Let's Encrypt
-3. Proxy inverso.
