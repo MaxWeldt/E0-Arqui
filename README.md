@@ -23,6 +23,9 @@ Para acceder por SSH a la máquina EC2, debe ubicar el archivo `.pem` entregado 
    ssh -i "parclavesec2.pem" ubuntu@18.222.132.77
 
    cd E0_Arqui
+
+   (aca pueden corregir lo que sea como por ejemplo:)
+   
    sudo docker compose ps
 
 
